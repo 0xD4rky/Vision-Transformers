@@ -53,10 +53,11 @@ class Embeddings(nn.Module):
 
 class Attention(nn.Module):
     """
-        Single head attention
-        Will be used in Multi Heads
+    Attention module
+
+    Will be used in:
+        Multi-headed-attention Module
     """
-    
     def __init__(self,vector_dim,attention_head_size,dropout,bias = True):
         
         super().__init__()
@@ -80,10 +81,53 @@ class Attention(nn.Module):
         attention_probs = self.dropout(attention_probs)
         output = torch.matmul(attention_probs,value)
         return output,attention_probs
-    
+        
+class MultiheadAttention(nn.Module):
+    """
+    Multi-headed-attention module
 
+    Will be used in:
+        Transformer Encoder
+    """
+    
+    def __init__(self,config):
+        super().__init()
+        self.vector_dim = config["vector_dim"]
+        self.num_attention_heads = config["num_attention_heads"]
         
+        self.attention_head_size =  self.vector_sim // self.num_attention_heads
+        self.all_head_size = self.num_attention_heads * self.attention_head_size
         
+        self.qkv_bias = config["qkv_bias"]
+        #creating a list of attention heads
+        self.heads = nn.ModuleList([])
+        for _ in range(self.num_attention_heads):
+            head = Attention(
+                self.vector_dim,
+                self.attention_head_size,
+                config["attention_probs_dropout_prob"],
+                self.qkv_bias
+                )
+            self.heads.append(head)
+        
+        # project attention output back to vector dim
+        self.output_projection = nn.Linear(self.all_head_size,self.vector_dim)
+        self.output_dropout = nn.Dropout(config["hidden_dropout_prob"])
+        
+    def forward(self,x,output_attentions = False):
+        attention_outputs = [head(x) for head in self.heads] # for each attention head
+        attention_output = torch.cat([attention_output for attention_output, _ in attention_outputs],dim=-1)
+        # Project the concatenated attention output back to the hidden size
+        attention_output = self.output_projection(attention_output)
+        attention_output = self.output_dropout(attention_output)
+        # Return the attention output and the attention probabilities (optional)
+        if not output_attentions:
+            return (attention_output, None)
+        else:
+            attention_probs = torch.stack([attention_probs for _, attention_probs in attention_outputs], dim=1)
+            return (attention_output, attention_probs)
+        
+            
             
             
             

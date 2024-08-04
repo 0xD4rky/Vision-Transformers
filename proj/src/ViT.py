@@ -49,3 +49,42 @@ class Embeddings(nn.Module):
         x = torch.cat((cls_tokens,x),dim = 1)
         x = x + self.positional_encoding
         return x
+    
+
+class Attention(nn.Module):
+    """
+        Single head attention
+        Will be used in Multi Heads
+    """
+    
+    def __init__(self,vector_dim,attention_head_size,dropout,bias = True):
+        
+        super().__init__()
+        self.vector_dim = vector_dim
+        self.attention_head_size = attention_head_size
+        self.dropout = nn.Dropout(dropout)
+        
+        # {query,key,value}
+        self.query = nn.Linear(vector_dim,attention_head_size, bias = bias)
+        self.key = nn.Linear(vector_dim, attention_head_size,bias = bias)
+        self.value = nn.Linear(vector_dim,attention_head_size,bias = bias)
+        
+    def forward(self,x):
+        query = self.query(x)
+        key = self.key(x)
+        value = self.value(x)
+        # i have them in matrix form
+        
+        similarity = torch.matmul(query,key.transpose(-1,-2))
+        attention_probs = nn.functional.softmax((similarity/math.sqrt(self.attention_head_size)),dim = 1)
+        attention_probs = self.dropout(attention_probs)
+        output = torch.matmul(attention_probs,value)
+        return output,attention_probs
+    
+
+        
+        
+            
+            
+            
+        

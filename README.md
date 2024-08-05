@@ -6,5 +6,7 @@ The main focus is on dealing with the temporal axis using ViT.
 ## Papers:
 
 ### Base 1:
-[Attention Is All You Need](https://arxiv.org/abs/1706.03762)
+* [Survey](https://arxiv.org/abs/2111.06091)
+* [Attention Is All You Need](https://arxiv.org/abs/1706.03762)
+* [How to build your ViT](https://arxiv.org/abs/2106.10270)
 

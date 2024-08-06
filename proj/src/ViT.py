@@ -48,8 +48,7 @@ class Embeddings(nn.Module):
         """
         x = torch.cat((cls_tokens,x),dim = 1)
         x = x + self.positional_encoding
-        return x
-    
+        return x   
 
 class Attention(nn.Module):
     """
@@ -126,8 +125,76 @@ class MultiheadAttention(nn.Module):
         else:
             attention_probs = torch.stack([attention_probs for _, attention_probs in attention_outputs], dim=1)
             return (attention_output, attention_probs)
+
+class MLP(nn.Module):
+    """
+    Multi-Layer Perceptron Module
+    """
+    
+    def __init__(self,config):
+        super().__init__()
+        self.dense_1 = nn.Linear(config["vector_dim"],config["hidden_size"])
+        self.act = NewGELUActivation()
+        self.dense_2 = nn.Linear(config["hidden_size"],config["vector_dim"])
+        self.dropout = nn.Dropout(config["hidden_dropout_prob"])
         
-            
+    def forward(self,x):
+        x = self.dense_1(x)
+        x = self.act(x)
+        x = self.dense_2(x)
+        x = self.dropout(x)
+        return x
+    
+class Block(nn.Module):
+    
+    """
+    Single transformer block
+    """
+    
+    def __init__(self,config):
+        super().__init__()
+        self.attention = MultiheadAttention(config)
+        self.layer_norm1 = nn.LayerNorm(config["vector_dim"])
+        self.mlp = MLP(config)
+        self.layernorm_2 = nn.LayerNorm(config["vector_dim"])
+        
+    def forward(self,x,output_attentions = False):
+        # {self-attention after normalizing layers}
+        attention_output, attention_prob = self.attention(self.layer_norm1(x),output_attentions=output_attentions)
+        x = x + attention_output # {skip-connections}\
+        mlp_output = self.mlp(self.layer_norm2(x)) #{ffn}
+        x = x + mlp_output
+        if not output_attentions:
+            return (x,None)
+        else: 
+            return (x,attention_prob)
+
+class Encoder(nn.Module):
+    
+    def __init__(self,config):
+        super().__init__()
+        
+        self.blocks = nn.ModuleList([])
+        for _ in range(config["num_hidden_layers"]):
+            block = Block(config)
+            self.blocks.append(block)
+
+    def forward(self, x, output_attentions=False):
+        # Calculate the transformer block's output for each block
+        all_attentions = []
+        for block in self.blocks:
+            x, attention_probs = block(x, output_attentions=output_attentions)
+            if output_attentions:
+                all_attentions.append(attention_probs)
+        # Return the encoder's output and the attention probabilities (optional)
+        if not output_attentions:
+            return (x, None)
+        else:
+            return (x, all_attentions)
+
+        
+        
+                
             
             
             

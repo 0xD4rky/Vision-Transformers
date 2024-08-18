@@ -50,3 +50,4 @@ def load_experiment(experiment_name,checkpoint_name="model_final.pt",base_dir = 
     cpfile = os.path.join(outdir, checkpoint_name)
     model.load_state_dict(torch.load(cpfile))
     return config, model, train_losses, test_losses, accuracies
+

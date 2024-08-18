@@ -1,7 +1,5 @@
 from base import *
 
-print("hi")
-
 class PatchEmbeddings(nn.Module):
     """
     Convert the image into patches and then project them into a vector space.
@@ -12,9 +10,9 @@ class PatchEmbeddings(nn.Module):
         self.image_size = config["image_size"]
         self.patch_size = config["patch_size"]
         self.num_channels = config["num_channels"]
-        self.hidden_size = config["hidden_size"]
+        self.vector_dim = config["vector_dim"]
         self.num_patches = (self.image_size // self.patch_size) ** 2
-        self.projection = nn.Conv2d(self.num_channels, self.hidden_size, kernel_size=self.patch_size, stride=self.patch_size)
+        self.projection = nn.Conv2d(self.num_channels, self.vector_dim, kernel_size=self.patch_size, stride=self.patch_size)
 
     def forward(self, x):
         # {batch_size, num_channels, image_size, image_size}-> {batch_size, num_patches, vector_dim}
@@ -242,8 +240,6 @@ class Classification(nn.Module):
                 std=self.config["initializer_range"],
             ).to(module.position_embeddings.dtype)
 
-
-print("clear hai boss")
             
             
         

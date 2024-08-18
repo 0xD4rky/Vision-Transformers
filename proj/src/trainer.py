@@ -53,4 +53,22 @@ class Trainer:
                 save_checkpoint(self.exp_name, self.model, i+1)
         
         save_experiment(self.exp_name, self.model, i+1)
+    
+    def train_epoch(self,train_loader):
         
+        self.model.train()
+        total_loss = 0.0
+        for batch in train_loader:
+            
+            batch = [t.tp(self.device) for t in batch]
+            images, labels = batch
+            self.optimizer.zero_grad()
+            loss = self.loss(self.model(images)[0], labels)
+            loss.backward()
+            self.optimizer.step()
+            total_loss += loss.item()*len(images)
+            
+        return total_loss/ len(train_loader.dataset)
+    
+    
+    

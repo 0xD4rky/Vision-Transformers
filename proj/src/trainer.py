@@ -107,8 +107,31 @@ def parse_args():
     parser.add_argument("--device", type=str)
     parser.add_argument("--save-model-every", type=int, default=0)
     
-    args = parse_args()
+    args = parser.parse_args()
     if args.device is None:
         args.device = "cuda" if torch.cuda.is_available() else "cpu"
     return args
 
+print("hi")
+
+def main():
+    
+    args = parse_args()
+    
+    batch_size = args.batch_size
+    epochs = args.epochs
+    lr = args.lr
+    device = args.device
+    save_exp_every_n_epochs = args.save_model_every
+    
+    trainloader, testloader = prepare_data(batch_size = batch_size)
+    model = Classification(config)
+    optimizer = torch.optim.AdamW(model.parameters(), lr = lr, weight_decay = 1e-2)
+    loss_fn = nn.CrossEntropyLoss()
+    trainer = Trainer(model, optimizer, loss_fn, args.exp_name, device = device)
+    trainer.train(trainloader, testloader, epochs, save_exp_every_n_epochs = save_exp_every_n_epochs)
+    
+    
+if __name__ == "__main__":
+    
+    main()

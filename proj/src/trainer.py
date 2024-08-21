@@ -57,7 +57,7 @@ class Trainer:
     def train_epoch(self,train_loader):
         
         self.model.train()
-        total_loss = 0.0
+        total_loss = 0
         for batch in train_loader:
             
             batch = [t.tp(self.device) for t in batch]
@@ -71,4 +71,28 @@ class Trainer:
         return total_loss/ len(train_loader.dataset)
     
     
-    
+    @torch.no_grad()
+    def evaluate(self,test_loader):
+        self.model.eval()
+        total_loss = 0
+        correct = 0
+        
+        with torch.no_grad():
+            
+            for batch in test_loader():
+                batch = [t.to(self.device) for t in batch]
+                images, labels = batch
+                
+                logits,_ = self.model(images)
+                
+                loss = self.loss(logits,labels)
+                total_loss += loss.item() * len(images)
+                
+                predictions = torch.argmax(logits, dim = 1)
+                correct = torch.sum(predictions == labels).item()
+                
+        accuracy = correct/ len(test_loader.dataset)
+        avg_loss = total_loss / len(test_loader.dataset)
+        return accuracy, avg_loss
+
+        

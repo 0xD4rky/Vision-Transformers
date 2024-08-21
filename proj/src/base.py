@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from PIL import image
+from PIL import Image
 import math
 
 class NewGELUActivation(nn.Module):

@@ -95,4 +95,20 @@ class Trainer:
         avg_loss = total_loss / len(test_loader.dataset)
         return accuracy, avg_loss
 
-        
+
+def parse_args():
+    
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--exp-name", type = str, required = True)
+    parser.add_argument("--batch-size", type = int, default = 256)
+    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--lr", type=float, default=1e-2)
+    parser.add_argument("--device", type=str)
+    parser.add_argument("--save-model-every", type=int, default=0)
+    
+    args = parse_args()
+    if args.device is None:
+        args.device = "cuda" if torch.cuda.is_available() else "cpu"
+    return args
+

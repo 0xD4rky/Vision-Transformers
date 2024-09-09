@@ -22,5 +22,11 @@ The main focus is on dealing with the spatio-temporal relations using visual tra
 * "The Illustrated Transformers": [Blog Post](http://jalammar.github.io/illustrated-transformer/)
 * "Vision Transformer Explained" [Blog Post](https://theaisummer.com/vision-transformer/)
 
+## 2. Convolutional ViT and Hybrid Models:
+
+* CvT: Introducing Convolutions to Vision Transformers: [Paper](https://arxiv.org/abs/2103.15808) | [Code](https://github.com/microsoft/CvT)
+* CoAtNet: Marrying Convolution and Attention for All Data Sizes: [Paper](https://arxiv.org/abs/2106.04803)
+* ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases: [Paper](https://arxiv.org/abs/2103.10697) | [Code](https://github.com/facebookresearch/convit)
+
   
 

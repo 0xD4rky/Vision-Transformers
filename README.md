@@ -3,6 +3,9 @@
 I have tried to cover all the bases for understanding and implementing Vision Transformers (ViT) and their evolution into Video Vision Transformers (ViViT).
 The main focus is on dealing with the spatio-temporal relations using visual transformers.
 
+![image](https://github.com/user-attachments/assets/bc8a2727-b33a-4681-aee6-c6b617e7ad81)
+
+
 ## 1. Vision Transformer (ViT) Fundamentals
 
 ### Surveys and Overviews:

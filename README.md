@@ -28,5 +28,10 @@ The main focus is on dealing with the spatio-temporal relations using visual tra
 * CoAtNet: Marrying Convolution and Attention for All Data Sizes: [Paper](https://arxiv.org/abs/2106.04803)
 * ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases: [Paper](https://arxiv.org/abs/2103.10697) | [Code](https://github.com/facebookresearch/convit)
 
+
+## 3. Efficient Transformers and Swin Transformer
+
+* Swin Transformer: Hierarchical Vision Transformer using Shifted Windows [Paper](https://arxiv.org/abs/2103.14030) | [Code](https://github.com/microsoft/Swin-Transformer)
+
   
 

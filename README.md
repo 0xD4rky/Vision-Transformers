@@ -29,11 +29,18 @@ The main focus is on dealing with the spatio-temporal relations using visual tra
 * ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases: [Paper](https://arxiv.org/abs/2103.10697) | [Code](https://github.com/facebookresearch/convit)
 
 
-## 3. Efficient Transformers and Swin Transformer
+## 3. Efficient Transformers and Swin Transformer:
 
 * Swin Transformer: Hierarchical Vision Transformer using Shifted Windows: [Paper](https://arxiv.org/abs/2103.14030) | [Code](https://github.com/microsoft/Swin-Transformer)
 * Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions: [Paper](https://arxiv.org/abs/2102.12122) | [Code](https://github.com/whai362/PVT)
 * Efficient Transformers: A Survey: [Paper](https://arxiv.org/abs/2009.06732)
+
+
+## 4. Space-Time Attention and Video Transformers:
+
+* TimeSformer: Is Space-Time Attention All You Need for Video Understanding? [Paper](https://arxiv.org/abs/2102.05095) | [Code](https://github.com/facebookresearch/TimeSformer)
+* Space-Time Mixing Attention for Video Transformer: [Paper](https://arxiv.org/abs/2106.05968)
+* MViT: Multiscale Vision Transformers: [Paper](https://arxiv.org/abs/2104.11227) | [Code](https://github.com/facebookresearch/SlowFast)
 
 
   

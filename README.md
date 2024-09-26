@@ -12,6 +12,7 @@ The main focus is on dealing with the spatio-temporal relations using visual tra
 
 * [Transformers in Vision: A Survey](https://arxiv.org/abs/2101.01169)
 * [A Survey of Visual Transformers](https://arxiv.org/abs/2111.06091)
+* [Transformers in Vision](https://arxiv.org/abs/2101.01169)
 
 ### Key Papers:
 

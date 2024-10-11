@@ -62,3 +62,4 @@ The main focus is on dealing with the spatio-temporal relations using visual tra
 * Experiment with different architectures and datasets to solidify your understanding.
 * Use the additional resources to dive deeper into specific topics or applications.
  
+ 

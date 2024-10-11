@@ -47,5 +47,18 @@ The main focus is on dealing with the spatio-temporal relations using visual tra
 * MViT: Multiscale Vision Transformers: [Paper](https://arxiv.org/abs/2104.11227) | [Code](https://github.com/facebookresearch/SlowFast)
 
 
-  
+## 5. Video Vision Transformer (ViViT): 
 
+*  ViViT: A Video Vision Transformer: [Paper](https://arxiv.org/abs/2103.15691) | [Code](https://github.com/google-research/scenic/tree/main/scenic/projects/vivit)
+*  Video Transformer Network: [Paper](https://arxiv.org/abs/2102.00719) | [Code](https://github.com/mx-mark/VideoTransformer-pytorch)
+
+
+
+## How to use this Repo?
+
+* Start by reading the survey papers to get a broad understanding of the field.
+* For each key paper, read the abstract and introduction, then skim through the methodology and results sections.
+* Implement key concepts using the provided GitHub repositories or your own code.
+* Experiment with different architectures and datasets to solidify your understanding.
+* Use the additional resources to dive deeper into specific topics or applications.
+ 

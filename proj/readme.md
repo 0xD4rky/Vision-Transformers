@@ -33,3 +33,18 @@ pip install -r requirements.txt
    ```
 2. Prepare the data: The `data.py` script handles the CIFAR-10 dataset preparation. You don't need to run this separately as it will be called by the trainer.
 
+3. Training:
+   ```
+   python trainer.py
+   ```
+   This script will train the Vision Transformer on the CIFAR-10 dataset and evaluate its performance.
+
+
+## Model Architecture
+The Vision Transformer (ViT) architecture is implemented in `ViT.py`. It follows the original paper's design, including:
+
+* Patch embedding
+* Positional embedding
+* Transformer encoder with multi-head self-attention and feed-forward layers
+* Classification head
+

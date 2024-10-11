@@ -9,7 +9,7 @@ This project implements a Vision Transformer (ViT) from scratch using Python and
 
 The project consists of the following main files:
 
-* `base.py`: Contains the GELU activation function implementation.
+* `base.py`: Contains the GELU activation function implementation. [Paper](https://arxiv.org/abs/1606.08415) | [Code](https://github.com/karfaoui/gelu)
 * `data.py`: Handles data preparation using the CIFAR-10 dataset.
 * `ViT.py`: Contains the Vision Transformer model implemented from scratch.
 * `trainer.py`: Implements the entire training and evaluation pipeline.

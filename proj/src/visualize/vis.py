@@ -23,7 +23,9 @@ patch_embedding = PatchEmbedding(3, vector_dim, patch_size)
 output = patch_embedding(input_image)
 
 def visualize_patches(input_image, patch_size):
-    
+    """
+    visualizing patches and attention maps
+    """
     input_image = input_image.squeeze(0).permute(1, 2, 0).numpy()
     
     fig, ax = plt.subplots()

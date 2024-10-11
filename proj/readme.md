@@ -23,3 +23,13 @@ cd proj/src
 pip install -r requirements.txt
 ```
 
+## Inference:
+
+1. Clone the repo:
+
+   ```
+   git clone https://github.com/0xD4rky/Vision-Transformer.git
+   cd proj/src
+   ```
+2. Prepare the data: The `data.py` script handles the CIFAR-10 dataset preparation. You don't need to run this separately as it will be called by the trainer.
+

@@ -48,3 +48,33 @@ The Vision Transformer (ViT) architecture is implemented in `ViT.py`. It follows
 * Transformer encoder with multi-head self-attention and feed-forward layers
 * Classification head
 
+
+## Training and Evaluation:
+
+The `trainer.py` script handles both training and evaluation. It includes:
+
+* Data loading and preprocessing
+* Model initialization
+* Training loop with gradient updates
+* Evaluation on the test set
+* Logging of training progress and results
+
+## Utility Functions:
+
+The `utils.py` file contains helper functions for:
+
+* Saving and loading model checkpoints
+* Logging training progress
+* Any other utility functions used across the project
+
+## Results:
+
+(You can add information about the performance of your model on the CIFAR-10 dataset, including accuracy, training time, and any comparisons with baseline models.)
+
+## Future Work:
+
+* Implement data augmentation techniques to improve generalization
+* Experiment with different model sizes (e.g., ViT-Base, ViT-Large)
+* Try fine-tuning on different datasets
+* Implement visualization tools for attention maps
+

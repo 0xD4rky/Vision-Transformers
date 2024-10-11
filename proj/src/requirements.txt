@@ -1,0 +1,8 @@
+python-apt==2.7.7+ubuntu3
+python-dateutil==2.8.2
+python-debian==0.1.49+ubuntu2
+python-multipart==0.0.12
+torch==2.4.1
+torchaudio==2.4.1
+torchvision==0.19.1
+numpy==1.26.4

@@ -71,10 +71,16 @@ The `utils.py` file contains helper functions for:
 
 (You can add information about the performance of your model on the CIFAR-10 dataset, including accuracy, training time, and any comparisons with baseline models.)
 
-## Future Work:
+`VISUALIZATION`:
 
-* Implement data augmentation techniques to improve generalization
-* Experiment with different model sizes (e.g., ViT-Base, ViT-Large)
-* Try fine-tuning on different datasets
-* Implement visualization tools for attention maps
+### 1. Image Patches:
+
+![Screenshot from 2024-10-11 22-51-58](https://github.com/user-attachments/assets/fa1673ca-b0fe-46ca-917b-ce9268eb4510)
+
+### 2. Feature Maps:
+
+![Screenshot from 2024-10-11 22-52-21](https://github.com/user-attachments/assets/ea7bac63-a9c7-4d7f-88b3-fab45a84d766)
+
+
+
 

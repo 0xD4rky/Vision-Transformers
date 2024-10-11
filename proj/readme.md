@@ -15,3 +15,11 @@ The project consists of the following main files:
 * `trainer.py`: Implements the entire training and evaluation pipeline.
 * `utils.py`: Contains utility functions for model and checkpoint management.
 * visualization contains `vis.py` to visualize image patches and attention maps.
+
+## Requirements:
+
+```
+cd proj/src
+pip install -r requirements.txt
+```
+

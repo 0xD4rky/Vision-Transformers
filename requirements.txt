@@ -1,0 +1,9 @@
+torch 
+torchvision 
+transformers 
+timm 
+matplotlib 
+opencv-python 
+plotly 
+streamlit 
+gradio

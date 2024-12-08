@@ -7,3 +7,4 @@ opencv-python
 plotly 
 streamlit 
 gradio
+flask

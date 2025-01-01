@@ -100,5 +100,56 @@ class Attention(nn.Module):
         output = torch.matmul(attention_probs, value)
         return output, attention_probs
     
+class MultiheadAttention(nn.Module):
+    """
+    Multi-headed-attention module with LoRA support
+    """
+    def __init__(self, config):
+        super().__init__()
+        self.vector_dim = config["vector_dim"]
+        self.num_attention_heads = config["num_attention_heads"]
+        
+        self.attention_head_size = self.vector_dim // self.num_attention_heads
+        self.all_head_size = self.num_attention_heads * self.attention_head_size
+        
+        self.qkv_bias = config["qkv_bias"]
+        self.use_lora = config.get("use_lora", False)  # New parameter
+        self.lora_rank = config.get("lora_rank", 8)    # New parameter
+        self.lora_alpha = config.get("lora_alpha", 16) # New parameter
+        
+        self.heads = nn.ModuleList([
+            Attention(
+                self.vector_dim,
+                self.attention_head_size,
+                config["attention_probs_dropout_prob"],
+                self.qkv_bias,
+                self.use_lora,
+                self.lora_rank,
+                self.lora_alpha
+            )
+            for _ in range(self.num_attention_heads)
+        ])
+        
+        self.output_projection = nn.Linear(self.all_head_size, self.vector_dim)
+        self.output_dropout = nn.Dropout(config["hidden_dropout_prob"])
     
+    def forward(self, x, output_attentions=False):
+        attention_outputs = [head(x) for head in self.heads]
+        attention_output = torch.cat(
+            [attention_output for attention_output, _ in attention_outputs],
+            dim=-1
+        )
+                
+        attention_output = self.output_projection(attention_output)
+        attention_output = self.output_dropout(attention_output)
+        
+        if not output_attentions:
+            return (attention_output, None)
+        
+        attention_probs = torch.stack(
+            [attention_probs for _, attention_probs in attention_outputs],
+            dim=1
+        )
+        return (attention_output, attention_probs)
+
         

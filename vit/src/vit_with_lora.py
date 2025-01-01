@@ -48,10 +48,7 @@ class Embeddings(nn.Module):
     def __init__(self,config):
         self.config = config
         self.patch_emb = PatchEmbeddings(config)
-        
         self.cls_token = nn.Parameter(torch.randn(1,1,config["vector_dim"]))
-        
-        # create learnable positional encoding and add +1 dim for [CLS]
         self.positional_encoding = nn.Parameter(torch.randn(1,self.patch_emb.num_patches + 1, config["vector_dim"]))
         self.droput = nn.Dropout(config["droput_prob"])
         
@@ -68,3 +65,40 @@ class Embeddings(nn.Module):
         x = torch.cat((cls_tokens,x),dim = 1)
         x = x + self.positional_encoding
         return x
+    
+class Attention(nn.Module):
+    """
+    Attention module with LoRA Support
+    """
+    def __init__(self,vector_dim,attention_head_size,dropout,bias=True, use_lora=False, lora_rank=8, lora_alpha=16):
+        super().__init__()
+        self.vector_dim = vector_dim
+        self.attention_head_size = attention_head_size
+        self.dropout = nn.Dropout(dropout)
+        self.use_lora = use_lora
+        self.query = nn.Linear(vector_dim, attention_head_size, bias = bias)
+        self.key = nn.Linear(vector_dim, attention_head_size, bias = bias)
+        self.value = nn.Linear(vector_dim, attention_head_size, bias = bias)
+
+        if use_lora:
+            self.lora_q = LoRALayer(vector_dim, attention_head_size, lora_rank, lora_alpha)
+            self.lora_v = LoRALayer(vector_dim, attention_head_size, lora_rank, lora_alpha)
+        
+    def forward(self, x):
+
+        q = self.query(x)
+        key = self.key(x)
+        v = self.value(x)
+
+        if self.use_lora:
+            query = q + self.lora_q(x)
+            value = v + self.lora_v(x)
+        
+        similarity = torch.matmul(query, key.transpose(-1,-2))
+        attention_probs = F.softmax((similarity/math.sqrt(self.attention_head_size)),dim = 1)
+        attention_probs = self.dropout(attention_probs)
+        output = torch.matmul(attention_probs, value)
+        return output, attention_probs
+    
+    
+        

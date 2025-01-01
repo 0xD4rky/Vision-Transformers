@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import math
+from base import *
 
 class LoRALayer(nn.Module):
     """Low-Rank Adaptation layer"""
@@ -152,4 +153,43 @@ class MultiheadAttention(nn.Module):
         )
         return (attention_output, attention_probs)
 
+class MLP(nn.Module):
+    """
+    Multi-Layer Perceptron Module with LoRA support
+    """
+    
+    def __init__(self, config):
+        super().__init__()
+        self.use_lora = config.get("use_lora", False)
+        self.lora_rank = config.get("lora_rank", 8)
+        self.lora_alpha = config.get("lora_alpha", 16)
+        self.dense_1 = nn.Linear(config["vector_dim"], config["hidden_size"])
+        self.dense_2 = nn.Linear(config["hidden_size"], config["vector_dim"])
         
+        if self.use_lora:
+            self.lora_1 = LoRALayer(
+                config["vector_dim"],
+                config["hidden_size"],
+                self.lora_rank,
+                self.lora_alpha
+            )
+            self.lora_2 = LoRALayer(
+                config["hidden_size"],
+                config["vector_dim"],
+                self.lora_rank,
+                self.lora_alpha
+            )
+        
+        self.act = NewGELUActivation()
+        self.dropout = nn.Dropout(config["hidden_dropout_prob"])
+        
+    def forward(self, x):
+        hidden = self.dense_1(x)
+        if self.use_lora:
+            hidden = hidden + self.lora_1(x)
+        hidden = self.act(hidden)
+        output = self.dense_2(hidden)
+        if self.use_lora:
+            output = output + self.lora_2(hidden)
+        output = self.dropout(output)
+        return output

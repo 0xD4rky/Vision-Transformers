@@ -112,8 +112,6 @@ def parse_args():
         args.device = "cuda" if torch.cuda.is_available() else "cpu"
     return args
 
-print("hi")
-
 def main():
     
     args = parse_args()

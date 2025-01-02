@@ -223,3 +223,27 @@ class Block(nn.Module):
             return (x, None)
         else:
             return (x, attention_probs)
+        
+class Encoder(nn.Module):
+    """
+    Transformer encoder with LoRA support
+    """
+    
+    def __init__(self, config):
+        super().__init__()
+        self.blocks = nn.ModuleList([
+            Block(config) for _ in range(config["num_hidden_layers"])
+        ])
+
+    def forward(self, x, output_attentions=False):
+        all_attentions = []
+        
+        for block in self.blocks:
+            x, attention_probs = block(x, output_attentions=output_attentions)
+            if output_attentions:
+                all_attentions.append(attention_probs)
+                
+        if not output_attentions:
+            return (x, None)
+        else:
+            return (x, all_attentions)

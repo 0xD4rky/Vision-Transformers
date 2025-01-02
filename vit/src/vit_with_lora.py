@@ -202,3 +202,24 @@ def prepare_mlp_for_lora_training(model):
         else:
             param.requires_grad = True
     return model
+
+class Block(nn.Module):
+
+    "single transformer block with LoRA support"
+
+    def __init__(self, config):
+        super().__init_()
+        self.attention = MultiheadAttention(config)
+        self.layer_norm1 = nn.LayerNorm(config["vector_dim"])
+        self.mlp = MLP(config)
+        self.layer_norm2 = nn.LayerNorm(config["vector_dim"])
+    
+    def forward(self, x, output_attentions = False):
+        attention_output, attention_probs = self.attention(self.layer_norm1(x), output_attentions=output_attentions)
+        x = x + attention_output
+        mlp_output = self.mlp(self.layer_norm2(x))
+        x = x + mlp_output
+        if not output_attentions:
+            return (x, None)
+        else:
+            return (x, attention_probs)

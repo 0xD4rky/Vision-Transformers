@@ -260,3 +260,76 @@ class LoRALinear(nn.Module):
     def forward(self, x):
         return self.linear(x) + self.lora(x)
     
+class Classification(nn.Module):
+    """
+    ViT model for classification with LoRA support
+    """
+    
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.img_size = config["img_size"]
+        self.vector_dim = config["vector_dim"]
+        self.num_classes = config["num_classes"]
+        
+        # Initialize components
+        self.embeddings = Embeddings(config)
+        self.encoder = Encoder(config)
+        
+        # Use LoRA for classifier if enabled
+        if config.get("use_lora", False):
+            self.classifier = LoRALinear(
+                self.vector_dim,
+                self.num_classes,
+                config.get("lora_rank", 8),
+                config.get("lora_alpha", 16)
+            )
+        else:
+            self.classifier = nn.Linear(self.vector_dim, self.num_classes)
+            
+        self.apply(self._init_weights)
+        
+    def forward(self, x, output_attentions=False):
+        embedding_output = self.embeddings(x)
+        encoder_output, all_attentions = self.encoder(
+            embedding_output,
+            output_attentions=output_attentions
+        )
+        
+        # Use CLS token for classification
+        logits = self.classifier(encoder_output[:, 0, :])
+        
+        if not output_attentions:
+            return (logits, None)
+        else:
+            return (logits, all_attentions)
+    
+    def _init_weights(self, module):
+        if isinstance(module, (nn.Linear, nn.Conv2d)):
+            torch.nn.init.normal_(
+                module.weight,
+                mean=0.0,
+                std=self.config["initializer_range"]
+            )
+            if module.bias is not None:
+                torch.nn.init.zeros_(module.bias)
+        elif isinstance(module, nn.LayerNorm):
+            module.bias.data.zero_()
+            module.weight.data.fill_(1.0)
+        elif isinstance(module, Embeddings):
+            module.position_embeddings.data = nn.init.trunc_normal_(
+                module.position_embeddings.data.to(torch.float32),
+                mean=0.0,
+                std=self.config["initializer_range"],
+            ).to(module.position_embeddings.dtype)
+
+def prepare_model_for_lora_training(model):
+    """
+    Prepare the model for LoRA training by freezing non-LoRA parameters
+    """
+    for name, param in model.named_parameters():
+        if 'lora' not in name:
+            param.requires_grad = False
+        else:
+            param.requires_grad = True
+    return model

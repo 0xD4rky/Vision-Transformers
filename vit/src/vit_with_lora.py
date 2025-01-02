@@ -247,3 +247,16 @@ class Encoder(nn.Module):
             return (x, None)
         else:
             return (x, all_attentions)
+        
+class LoRALinear(nn.Module):
+    """
+    Linear layer with LoRA support for classification head
+    """
+    def __init__(self, in_features, out_features, rank=8, alpha=16):
+        super().__init__()
+        self.linear = nn.Linear(in_features, out_features)
+        self.lora = LoRALayer(in_features, out_features, rank, alpha)
+        
+    def forward(self, x):
+        return self.linear(x) + self.lora(x)
+    

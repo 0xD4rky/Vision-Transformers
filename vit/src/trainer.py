@@ -4,7 +4,7 @@ import argparse
 
 from data import *
 from utils import save_checkpoint, save_experiment
-from ViT import Classification
+from vit_base import Classification
 
 config = {
     "patch_size": 4,  # Input image size: 32x32 -> 8x8 patches
@@ -124,6 +124,14 @@ def main():
     
     trainloader, testloader = prepare_data(batch_size = batch_size)
     model = Classification(config)
+    """
+    IF YOU WANT TO USE LORA TRAINING, UNCOMMENT THE BELOW LINES
+    def create_model():
+        model = Classification(config)
+        if config["use_lora"]:
+            model = prepare_model_for_lora_training(model)
+        return model
+    """
     optimizer = torch.optim.AdamW(model.parameters(), lr = lr, weight_decay = 1e-2)
     loss_fn = nn.CrossEntropyLoss()
     trainer = Trainer(model, optimizer, loss_fn, args.exp_name, device = device)

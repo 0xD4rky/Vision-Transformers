@@ -114,9 +114,9 @@ class MultiheadAttention(nn.Module):
         self.all_head_size = self.num_attention_heads * self.attention_head_size
         
         self.qkv_bias = config["qkv_bias"]
-        self.use_lora = config.get("use_lora", False)  # New parameter
-        self.lora_rank = config.get("lora_rank", 8)    # New parameter
-        self.lora_alpha = config.get("lora_alpha", 16) # New parameter
+        self.use_lora = config.get("use_lora", False)  
+        self.lora_rank = config.get("lora_rank", 8)    
+        self.lora_alpha = config.get("lora_alpha", 16) 
         
         self.heads = nn.ModuleList([
             Attention(
@@ -193,3 +193,12 @@ class MLP(nn.Module):
             output = output + self.lora_2(hidden)
         output = self.dropout(output)
         return output
+
+def prepare_mlp_for_lora_training(model):
+    """Freeze all parameters except LoRA parameters"""
+    for name, param in model.named_parameters():
+        if 'lora' not in name:
+            param.requires_grad = False
+        else:
+            param.requires_grad = True
+    return model
